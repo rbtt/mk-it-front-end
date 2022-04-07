@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 
 const MovieDetails = () => {
   const { title } = useParams()
-  console.log(title)
+
   return (
     <>
       <Typography variant='h1'>The Movie Details Page</Typography>

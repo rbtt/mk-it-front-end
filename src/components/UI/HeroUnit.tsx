@@ -1,4 +1,5 @@
 import { Container, Box, Typography, Stack, Button } from '@mui/material'
+import { GitHub } from '@mui/icons-material'
 
 export default function HeroUnit() {
   return (
@@ -24,7 +25,9 @@ export default function HeroUnit() {
             Hey this my Hero Element. Hope you like it. TODO: add background image
           </Typography>
           <Stack sx={{ pt: 1 }} direction='row' spacing={2} justifyContent='center'>
-            <Button variant='contained'>GitHub</Button>
+            <Button startIcon={<GitHub />} variant='contained' color='info'>
+              GitHub
+            </Button>
           </Stack>
         </Container>
       </Box>
