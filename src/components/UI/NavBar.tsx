@@ -1,13 +1,14 @@
 import { styled, alpha } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import InputBase from '@mui/material/InputBase'
 import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button } from '@mui/material'
+import { Button, Box, InputBaseProps } from '@mui/material'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useRef } from 'react'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -52,36 +53,56 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 export default function SearchAppBar() {
+  const navigate = useNavigate()
+  const searchRef = useRef<InputBaseProps>()
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' color='primary'>
-        <Toolbar>
+        <Toolbar
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
           <Typography
+            onClick={() => navigate('/')}
             variant='h6'
             noWrap
             component='div'
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              userSelect: 'none',
+              cursor: 'pointer',
+            }}
           >
             My Movies Collection
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder='Search…'
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Button
-            href='https://google.bg'
-            style={{ marginLeft: 10 }}
-            variant='outlined'
-            color='secondary'
-            LinkComponent='a'
-          >
-            Search
-          </Button>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon fillOpacity={0.5} />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder='Search…'
+                inputProps={{ 'aria-label': 'search' }}
+                spellCheck='false'
+                inputRef={searchRef}
+              />
+            </Search>
+            <Button
+              sx={{ marginLeft: 1 }}
+              variant='outlined'
+              color='secondary'
+              onClick={() => {
+                navigate(`/search?${encodeURI(searchRef?.current?.value as string)}`)
+              }}
+            >
+              Search
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>
