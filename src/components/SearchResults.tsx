@@ -21,6 +21,7 @@ const SearchResults = () => {
       >
         {favorites.map((item) => (
           <SearchItem
+            navigateToDetails
             key={item.id}
             title={item.title}
             image={item.imageUri}

@@ -1,7 +1,8 @@
-import { Container, Typography, Grid, Link, Button } from '@mui/material'
+import { Container, Typography, Grid, Link, Button, Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {
+  navigateToDetails: boolean
   title: string
   year: number
   genres: string[]
@@ -16,12 +17,23 @@ const SearchItem = (props: Props) => {
   return (
     <Grid item maxWidth='90%'>
       <Grid container direction='row' rowSpacing={1}>
-        <Grid item xs={2.3}>
-          <img src={props.image} loading='lazy' />
+        <Grid item xs={2.5}>
+          {props.navigateToDetails ? (
+            <Box
+              onClick={() => {
+                navigate(`/movies/${props.title}`)
+              }}
+              sx={{ cursor: 'pointer' }}
+            >
+              <img src={props.image} loading='lazy' />
+            </Box>
+          ) : (
+            <img src={props.image} loading='lazy' />
+          )}
         </Grid>
         <Grid item xs={8} sx={{ p: 2 }}>
           <Typography gutterBottom variant='h4' component='div'>
-            {props.title} ({props.year})
+            {`${props.title} (${props.year})`}
           </Typography>
           <Typography variant='h6'>
             {props.genres.toString()} | {props.length} minutes

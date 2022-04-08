@@ -14,13 +14,13 @@ const Favorites = () => {
   const favorites = useSelector((state) => state.favorites)
   return (
     <Container sx={{ py: 3 }} maxWidth='lg'>
-      <Typography component='h1' align='center' variant='h3'>
+      <Typography component='h2' align='center' variant='h3'>
         Your Favorites
       </Typography>
       <Grid
         container
         direction='row'
-        justifyContent='center'
+        justifyContent='flex-start'
         alignItems='center'
         spacing={3}
         mt={2}

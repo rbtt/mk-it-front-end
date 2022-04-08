@@ -27,7 +27,7 @@ const Search = () => {
       }}
       maxWidth='lg'
     >
-      <Typography variant='h2' component='h1'>
+      <Typography variant='h2' component='h1' paddingTop={2}>
         Search
       </Typography>
       <Grid
@@ -39,10 +39,15 @@ const Search = () => {
         direction={{ xs: 'column', md: 'row', lg: 'row' }}
       >
         <Grid item xs={6}>
-          <TextField sx={{ display: 'flex', flex: 1, margin: 1 }} size='small' />
+          <TextField
+            sx={{ display: 'flex', flex: 1, margin: 1 }}
+            size='small'
+            placeholder={searchTerm}
+            color='secondary'
+          />
         </Grid>
         <Grid item xs={1}>
-          <Button color='secondary' variant='outlined' size='medium'>
+          <Button color='secondary' variant='outlined' size='medium' style={{borderWidth: 2}}>
             Search
           </Button>
         </Grid>

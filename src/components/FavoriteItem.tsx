@@ -9,7 +9,7 @@ interface Props {
 const FavoriteItem = (props: Props) => {
   const navigate = useNavigate()
   return (
-    <Grid item sm={6} xs={10} md={2}>
+    <Grid item xs={10} sm={6} md={2}>
       <Card
         onClick={() => navigate(`/movies/${props.title}`)}
         style={{ cursor: 'pointer' }}
