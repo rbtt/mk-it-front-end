@@ -2,7 +2,7 @@ import { Container, Typography, Rating, TextField, Grid } from '@mui/material'
 import { useState, useEffect } from 'react'
 
 const Review = () => {
-  const [ratingValue, setRatingValue] = useState(4.5)
+  const [ratingValue, setRatingValue] = useState(2.5)
   const [notesValue, setNotesValue] = useState('')
   console.log(`component re-rendered => value: ${notesValue}`)
   useEffect(() => {

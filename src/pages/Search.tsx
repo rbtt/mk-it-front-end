@@ -58,9 +58,11 @@ const Search = () => {
         <Grid item xs={1}>
           <Button
             onClick={async () => {
-              await dispatch(clearSearchResults())
-              dispatch(searchMovie(searchInputValue))
-              navigate(`/search?title=${searchInputValue}`)
+              if (searchInputValue.length > 0) {
+                await dispatch(clearSearchResults())
+                dispatch(searchMovie(searchInputValue))
+                navigate(`/search?title=${searchInputValue}`)
+              }
             }}
             color='secondary'
             variant='outlined'

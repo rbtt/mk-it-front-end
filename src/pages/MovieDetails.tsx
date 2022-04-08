@@ -1,12 +1,63 @@
-import HeroUnit from '../components/UI/HeroUnit'
-import { Divider, Container, Typography, Grid, Card, CardMedia } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { Container, CircularProgress } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import SearchItem from '../components/SearchItem'
 import Review from '../components/Review'
+import { SearchResults } from '../store/actions'
+import noImage from '../assets/noImage'
 
 const MovieDetails = () => {
   const { title } = useParams()
   console.log('title: ', title)
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState<SearchResults>({
+    genres: [],
+    id: 0,
+    imageUri: '',
+    length: 0,
+    summary: '',
+    title: '',
+    url: '',
+    year: 0,
+  })
+
+  useEffect(() => {
+    ;(async function () {
+      setIsLoading(true)
+      const response = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${title}`)
+      const resData = await response.json()
+      setData({
+        genres: resData.genres,
+        id: resData.id,
+        imageUri: (resData.image && resData.image.medium) || noImage,
+        length: resData.runtime,
+        summary:
+          (resData.summary &&
+            resData.summary.replace(/<\/?[^>]+(>|$)/g, '').replace(/&amp;/g, '&')) ||
+          'No description.',
+        title: resData.name,
+        url: resData.officialSite || `https://google.com/search?q=${resData.name}`,
+        year: new Date(resData.premiered).getFullYear(),
+      })
+      setIsLoading(false)
+    })()
+  }, [])
+  console.log(data)
+  if (isLoading) {
+    return (
+      <Container
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 2,
+        }}
+      >
+        <CircularProgress />
+      </Container>
+    )
+  }
   return (
     <Container
       sx={{
@@ -22,17 +73,13 @@ const MovieDetails = () => {
       {/* <Typography variant='h2'>Movie Title: {title}</Typography> */}
       <SearchItem
         navigateToDetails={false}
-        key={1}
-        title='Breaking Bad'
-        image='https://static.tvmaze.com/uploads/images/medium_portrait/0/2400.jpg'
-        description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam bibendum turpis eget finibus volutpat. Orci varius natoque penatibus et
-          magnis dis parturient montes, nascetur ridiculus mus. Cras condimentum eros sit amet pretium fermentum. Pellentesque euismod, massa
-          non sollicitudin accumsan, elit nisi mollis erat, a vehicula est leo ac lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Nulla nec nisi massa.'
-        genres={['Drama', 'Thriller', 'Comedy']}
-        length={90}
-        url='https://youtube.com/'
-        year={2009}
+        title={data.title}
+        image={data.imageUri}
+        description={data.summary}
+        genres={data.genres}
+        length={data.length}
+        url={data.url}
+        year={data.year}
       />
       <Review />
     </Container>

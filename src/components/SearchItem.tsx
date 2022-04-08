@@ -1,4 +1,5 @@
 import { Container, Typography, Grid, Link, Button, Box } from '@mui/material'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 
 const SearchItem = (props: Props) => {
   const navigate = useNavigate()
+  const [isFavorite, setIsFavorite] = useState(false)
   return (
     <Grid item maxWidth='90%'>
       <Grid container direction='row' rowSpacing={1}>
@@ -48,8 +50,12 @@ const SearchItem = (props: Props) => {
               Visit official site
             </Link>
           </Typography>
-          <Button variant='contained' color='success'>
-            Add To Favorites
+          <Button
+            variant='contained'
+            color={isFavorite ? 'error' : 'success'}
+            onClick={() => setIsFavorite((v) => !v)}
+          >
+            {`${isFavorite ? 'remove from' : 'add to'} favorites`}
           </Button>
         </Grid>
       </Grid>
