@@ -9,14 +9,19 @@ import {
   Button,
   Box,
 } from '@mui/material'
-import { useLocation, useSearchParams } from 'react-router-dom'
-import { useSelector } from '../store/useSelector'
+import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import SearchResults from '../components/SearchResults'
+import { useDispatch } from 'react-redux'
+import { useSelector } from '../store/useSelector'
+import { searchMovie, clearSearchResults } from '../store/actions'
 
 const Search = () => {
+  const [searchInputValue, setSearchInputValue] = useState('')
+  const navigate = useNavigate()
   const location = useLocation()
-  const searchTerm = decodeURI(location.search.slice(1))
-
+  const searchTerm = decodeURI(location.search.slice(7))
+  const dispatch = useDispatch()
   return (
     <Container
       sx={{
@@ -44,10 +49,24 @@ const Search = () => {
             size='small'
             placeholder={searchTerm}
             color='secondary'
+            value={searchInputValue}
+            onChange={(e) => {
+              setSearchInputValue(e.target.value)
+            }}
           />
         </Grid>
         <Grid item xs={1}>
-          <Button color='secondary' variant='outlined' size='medium' style={{borderWidth: 2}}>
+          <Button
+            onClick={async () => {
+              await dispatch(clearSearchResults())
+              dispatch(searchMovie(searchInputValue))
+              navigate(`/search?title=${searchInputValue}`)
+            }}
+            color='secondary'
+            variant='outlined'
+            size='medium'
+            style={{ borderWidth: 2 }}
+          >
             Search
           </Button>
         </Grid>

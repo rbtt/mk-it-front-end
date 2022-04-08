@@ -8,7 +8,9 @@ import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
 import { Button, Box, InputBaseProps } from '@mui/material'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { searchMovie, clearSearchResults } from '../../store/actions'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -53,9 +55,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 export default function SearchAppBar() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const searchRef = useRef<InputBaseProps>()
-
+  const [value, setValue] = useState('')
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' color='primary'>
@@ -68,7 +70,10 @@ export default function SearchAppBar() {
           }}
         >
           <Typography
-            onClick={() => navigate('/')}
+            onClick={() => {
+              dispatch(clearSearchResults())
+              navigate('/')
+            }}
             variant='h6'
             noWrap
             component='div'
@@ -89,15 +94,21 @@ export default function SearchAppBar() {
                 placeholder='Search…'
                 inputProps={{ 'aria-label': 'search' }}
                 spellCheck='false'
-                inputRef={searchRef}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
               />
             </Search>
             <Button
               sx={{ marginLeft: 1 }}
               variant='outlined'
               color='secondary'
-              onClick={() => {
-                navigate(`/search?${encodeURI(searchRef?.current?.value as string)}`)
+              onClick={async () => {
+                await dispatch(clearSearchResults())
+                dispatch(searchMovie(value))
+                value.length === 0
+                  ? navigate('/search')
+                  : navigate(`/search?title=${encodeURI(value)}`)
+                setValue('')
               }}
             >
               Search

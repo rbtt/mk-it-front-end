@@ -1,11 +1,13 @@
 import { AnyAction } from 'redux'
-import { Favorites } from './actions'
+import { Favorites, SearchResults } from './actions'
 interface State {
   favorites: Favorites[]
+  searchResults: SearchResults[]
 }
 
 const initialState: State = {
   favorites: [],
+  searchResults: [],
 }
 
 export const rootReducer = (state = initialState, action: AnyAction) => {
@@ -14,6 +16,16 @@ export const rootReducer = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         favorites: action.favorites,
+      }
+    case 'SEARCH_MOVIE':
+      return {
+        ...state,
+        searchResults: action.searchResults,
+      }
+    case 'CLEAR_SEARCH_RESULTS':
+      return {
+        ...state,
+        searchResults: [],
       }
     default:
       return state

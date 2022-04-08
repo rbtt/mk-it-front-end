@@ -5,8 +5,8 @@ import { useEffect } from 'react'
 import SearchItem from './SearchItem'
 
 const SearchResults = () => {
-  const dispatch = useDispatch()
-  const favorites = useSelector((state) => state.favorites)
+  const results = useSelector((state) => state.searchResults)
+
   return (
     <Container sx={{ py: 3 }} maxWidth='lg'>
       <Grid
@@ -19,20 +19,17 @@ const SearchResults = () => {
         spacing={2}
         mt={1}
       >
-        {favorites.map((item) => (
+        {results.map((item) => (
           <SearchItem
             navigateToDetails
             key={item.id}
             title={item.title}
             image={item.imageUri}
-            description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam bibendum turpis eget finibus volutpat. Orci varius natoque penatibus et
-          magnis dis parturient montes, nascetur ridiculus mus. Cras condimentum eros sit amet pretium fermentum. Pellentesque euismod, massa
-          non sollicitudin accumsan, elit nisi mollis erat, a vehicula est leo ac lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-          Nulla nec nisi massa.'
-            genres={['Drama', 'Thriller', 'Comedy']}
-            length={90}
-            url='https://youtube.com/'
-            year={2009}
+            description={item.summary}
+            genres={item.genres}
+            length={item.length}
+            url={item.url}
+            year={item.year}
           />
         ))}
       </Grid>

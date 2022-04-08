@@ -36,7 +36,9 @@ const SearchItem = (props: Props) => {
             {`${props.title} (${props.year})`}
           </Typography>
           <Typography variant='h6'>
-            {props.genres.toString()} | {props.length} minutes
+            {props.genres.length > 0 && `${props.genres.toString()}`}
+            {props.genres.length > 0 && props.length && ' | '}
+            {props.length && `${props.length} minutes`}
           </Typography>
           <Typography variant='body1' marginY={1}>
             {props.description}
