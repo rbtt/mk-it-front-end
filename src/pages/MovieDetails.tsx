@@ -8,7 +8,6 @@ import noImage from '../assets/noImage'
 
 const MovieDetails = () => {
   const { title } = useParams()
-  console.log('title: ', title)
 
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState<SearchResults>({
@@ -42,8 +41,8 @@ const MovieDetails = () => {
       })
       setIsLoading(false)
     })()
-  }, [])
-  console.log(data)
+  }, [title])
+
   if (isLoading) {
     return (
       <Container
@@ -69,8 +68,6 @@ const MovieDetails = () => {
       }}
       maxWidth='lg'
     >
-      {/* <Typography variant='h2'>The Movie Details Page</Typography> */}
-      {/* <Typography variant='h2'>Movie Title: {title}</Typography> */}
       <SearchItem
         navigateToDetails={false}
         title={data.title}

@@ -1,4 +1,4 @@
-import { Container, Typography, Grid, Link, Button, Box } from '@mui/material'
+import { Typography, Grid, Link, Button, Box } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,9 +17,9 @@ const SearchItem = (props: Props) => {
   const navigate = useNavigate()
   const [isFavorite, setIsFavorite] = useState(false)
   return (
-    <Grid item maxWidth='90%'>
+    <Grid item width='100%'>
       <Grid container direction='row' rowSpacing={1}>
-        <Grid item xs={2.5}>
+        <Grid item xs={6} sm={4} md={3}>
           {props.navigateToDetails ? (
             <Box
               onClick={() => {
@@ -27,25 +27,24 @@ const SearchItem = (props: Props) => {
               }}
               sx={{ cursor: 'pointer' }}
             >
-              <img src={props.image} loading='lazy' />
+              <img src={props.image} loading='lazy' alt={props.title} />
             </Box>
           ) : (
-            <img src={props.image} loading='lazy' />
+            <img src={props.image} loading='lazy' alt={props.title} />
           )}
         </Grid>
-        <Grid item xs={8} sx={{ p: 2 }}>
+        <Grid item xs={12} sm={8} md={9} sx={{ p: 2 }}>
           <Typography gutterBottom variant='h4' component='div'>
             {`${props.title} (${props.year})`}
           </Typography>
-          <Typography variant='h6'>
-            {props.genres.length > 0 && `${props.genres.toString()}`}
+          <Typography variant='h6' marginBottom={1.5}>
+            {props.genres.length > 0 &&
+              `${props.genres.toString().replaceAll(',', ', ')}`}
             {props.genres.length > 0 && props.length && ' | '}
             {props.length && `${props.length} minutes`}
           </Typography>
-          <Typography variant='body1' marginY={1}>
-            {props.description}
-          </Typography>
-          <Typography marginBottom={1.5}>
+          <Typography variant='body1'>{props.description}</Typography>
+          <Typography marginBottom={1}>
             <Link href={props.url} color='secondary'>
               Visit official site
             </Link>

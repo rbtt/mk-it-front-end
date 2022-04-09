@@ -1,19 +1,8 @@
-import {
-  Divider,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardMedia,
-  TextField,
-  Button,
-  Box,
-} from '@mui/material'
+import { Container, Typography, Grid, TextField, Button } from '@mui/material'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import SearchResults from '../components/SearchResults'
 import { useDispatch } from 'react-redux'
-import { useSelector } from '../store/useSelector'
 import { searchMovie, clearSearchResults } from '../store/actions'
 
 const Search = () => {
@@ -40,7 +29,6 @@ const Search = () => {
         alignItems='center'
         justifyContent='center'
         container
-        // spacing={2}
         direction={{ xs: 'column', md: 'row', lg: 'row' }}
       >
         <Grid item xs={6}>

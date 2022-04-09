@@ -1,4 +1,4 @@
-import { Container, Typography, Grid, Card, CardMedia } from '@mui/material'
+import { Grid, Card, CardMedia } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {

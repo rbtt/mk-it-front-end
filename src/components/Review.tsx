@@ -1,4 +1,4 @@
-import { Container, Typography, Rating, TextField, Grid } from '@mui/material'
+import { Typography, Rating, TextField, Grid } from '@mui/material'
 import { useState, useEffect } from 'react'
 
 const Review = () => {
@@ -24,7 +24,6 @@ const Review = () => {
       alignItems='flex-start'
       spacing={2}
       mt={1}
-      paddingLeft={7}
     >
       <Grid item>
         <Typography variant='h4'>Your Review</Typography>
@@ -39,10 +38,10 @@ const Review = () => {
           }}
         />
       </Grid>
-      <Grid item sx={{ width: '50%' }}>
+      <Grid item sx={{ width: { md: 600, sm: '90%', xs: '100%' } }}>
         <TextField
           multiline
-          rows={5}
+          rows={6}
           fullWidth
           placeholder='Your private notes and comments about the movie...'
           value={notesValue}

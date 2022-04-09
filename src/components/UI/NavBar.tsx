@@ -1,14 +1,12 @@
 import { styled, alpha } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import InputBase from '@mui/material/InputBase'
-import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Box, InputBaseProps } from '@mui/material'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { useRef, useState } from 'react'
+import { Button, Box } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { searchMovie, clearSearchResults } from '../../store/actions'
 
@@ -81,11 +79,21 @@ export default function SearchAppBar() {
               display: { xs: 'none', sm: 'block' },
               userSelect: 'none',
               cursor: 'pointer',
+              backgroundColor: 'primary.main',
+              '&:hover': {
+                opacity: [0.9, 0.8, 0.7],
+              },
             }}
           >
             My Movies Collection
           </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: { xs: '100%', sm: 'inherit' },
+            }}
+          >
             <Search>
               <SearchIconWrapper>
                 <SearchIcon fillOpacity={0.5} />

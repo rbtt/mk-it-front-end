@@ -1,6 +1,5 @@
 import { Container, Typography, Grid } from '@mui/material'
 import FavoriteItem from './FavoriteItem'
-// import { parsedJSON as favorites } from '../dummy_data'
 import { useDispatch } from 'react-redux'
 import { loadFavorites } from '../store/actions'
 import { useSelector } from '../store/useSelector'
@@ -10,7 +9,7 @@ const Favorites = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(loadFavorites())
-  }, [])
+  }, [dispatch])
   const favorites = useSelector((state) => state.favorites)
   return (
     <Container sx={{ py: 3 }} maxWidth='lg'>
@@ -20,7 +19,7 @@ const Favorites = () => {
       <Grid
         container
         direction='row'
-        justifyContent='flex-start'
+        justifyContent='center'
         alignItems='center'
         spacing={3}
         mt={2}

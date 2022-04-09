@@ -1,7 +1,6 @@
-import { Container, Typography, Grid } from '@mui/material'
+import { Container, Grid } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { useSelector } from '../store/useSelector'
-import { useEffect } from 'react'
 import SearchItem from './SearchItem'
 
 const SearchResults = () => {
@@ -10,7 +9,6 @@ const SearchResults = () => {
   return (
     <Container sx={{ py: 3 }} maxWidth='lg'>
       <Grid
-        // border='1px solid red'
         maxWidth='lg'
         container
         direction='column'
