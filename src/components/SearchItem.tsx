@@ -1,9 +1,14 @@
 import { Typography, Grid, Link, Button, Box } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from '../store/useSelector'
+import { apiUrl } from '../env'
+import { useDispatch } from 'react-redux'
+import { addToFavorites, removeFromFavorites } from '../store/actions'
 
 interface Props {
   navigateToDetails: boolean
+  id: number
   title: string
   year: number
   genres: string[]
@@ -15,7 +20,38 @@ interface Props {
 
 const SearchItem = (props: Props) => {
   const navigate = useNavigate()
-  const [isFavorite, setIsFavorite] = useState(false)
+  const dispatch = useDispatch()
+  const favorites = useSelector((state) => state.favorites)
+  const [isFavorite, setIsFavorite] = useState<boolean>(
+    !!favorites.find((item) => item.id === props.id)
+  )
+  const changeFavoriteHandler = async () => {
+    if (isFavorite) {
+      await fetch(`${apiUrl}/favorites`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: props.id }),
+      })
+      await dispatch(removeFromFavorites(props.id))
+    } else {
+      await fetch(`${apiUrl}/favorites`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: props.id,
+          title: props.title,
+          imageUri: props.image,
+        }),
+      })
+      await dispatch(addToFavorites(props.id, props.title, props.image))
+    }
+    setIsFavorite((prevValue) => !prevValue)
+  }
+  console.log('isFavorite:', isFavorite)
   return (
     <Grid item width='100%'>
       <Grid container direction='row' rowSpacing={1}>
@@ -52,7 +88,7 @@ const SearchItem = (props: Props) => {
           <Button
             variant='contained'
             color={isFavorite ? 'error' : 'success'}
-            onClick={() => setIsFavorite((v) => !v)}
+            onClick={changeFavoriteHandler}
           >
             {`${isFavorite ? 'remove from' : 'add to'} favorites`}
           </Button>

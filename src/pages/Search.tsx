@@ -1,5 +1,5 @@
 import { Container, Typography, Grid, TextField, Button } from '@mui/material'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import SearchResults from '../components/SearchResults'
 import { useDispatch } from 'react-redux'
@@ -11,6 +11,15 @@ const Search = () => {
   const location = useLocation()
   const searchTerm = decodeURI(location.search.slice(7))
   const dispatch = useDispatch()
+
+  const searchHandler = useCallback(async () => {
+    if (searchInputValue.length > 0) {
+      await dispatch(clearSearchResults())
+      dispatch(searchMovie(searchInputValue))
+      navigate(`/search?title=${searchInputValue}`)
+    }
+  }, [dispatch, navigate, searchInputValue])
+
   return (
     <Container
       sx={{
@@ -31,7 +40,7 @@ const Search = () => {
         container
         direction={{ xs: 'column', md: 'row', lg: 'row' }}
       >
-        <Grid item xs={6}>
+        <Grid item xs={11} md={6} sx={{ display: 'flex', width: '100%' }}>
           <TextField
             sx={{ display: 'flex', flex: 1, margin: 1 }}
             size='small'
@@ -41,17 +50,14 @@ const Search = () => {
             onChange={(e) => {
               setSearchInputValue(e.target.value)
             }}
+            onKeyDown={async (e) => {
+              if (e.key === 'Enter') searchHandler()
+            }}
           />
         </Grid>
         <Grid item xs={1}>
           <Button
-            onClick={async () => {
-              if (searchInputValue.length > 0) {
-                await dispatch(clearSearchResults())
-                dispatch(searchMovie(searchInputValue))
-                navigate(`/search?title=${searchInputValue}`)
-              }
-            }}
+            onClick={searchHandler}
             color='secondary'
             variant='outlined'
             size='medium'

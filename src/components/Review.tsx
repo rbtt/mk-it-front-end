@@ -1,20 +1,52 @@
 import { Typography, Rating, TextField, Grid } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { apiUrl } from '../env'
 
-const Review = () => {
-  const [ratingValue, setRatingValue] = useState(2.5)
-  const [notesValue, setNotesValue] = useState('')
-  console.log(`component re-rendered => value: ${notesValue}`)
+interface Props {
+  movieId: number
+  initialRating: number
+  initialNotes: string
+}
+
+const Review = ({ movieId, initialRating, initialNotes }: Props) => {
+  const [ratingValue, setRatingValue] = useState(initialRating)
+  const [notesValue, setNotesValue] = useState(initialNotes)
+
+  const ratingChangeHandler = useCallback(
+    async (e: React.SyntheticEvent, newValue: number | null): Promise<void> => {
+      const response = await fetch(`${apiUrl}/ratings`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: movieId, rating: newValue }),
+      })
+      const newRating = await response.json()
+      newRating && setRatingValue(newRating.rating)
+    },
+    [movieId]
+  )
+
+  const notesChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setNotesValue(e.target.value)
+    },
+    []
+  )
+
   useEffect(() => {
-    let timer = setTimeout(() => {
-      console.log('dispatching action to update ratingValue')
-      console.log('dispatching action to update notesValue')
+    let timer = setTimeout(async () => {
+      await fetch(`${apiUrl}/notes`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: movieId, notes: notesValue }),
+      })
     }, 500)
+    return () => clearTimeout(timer)
+  }, [notesValue, movieId])
 
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [ratingValue, notesValue])
   return (
     <Grid
       maxWidth='lg'
@@ -33,9 +65,7 @@ const Review = () => {
           size='large'
           precision={0.5}
           value={ratingValue}
-          onChange={(e, newValue) => {
-            newValue && setRatingValue(newValue)
-          }}
+          onChange={ratingChangeHandler}
         />
       </Grid>
       <Grid item sx={{ width: { md: 600, sm: '90%', xs: '100%' } }}>
@@ -45,7 +75,7 @@ const Review = () => {
           fullWidth
           placeholder='Your private notes and comments about the movie...'
           value={notesValue}
-          onChange={(e) => setNotesValue(e.target.value)}
+          onChange={notesChangeHandler}
         />
       </Grid>
     </Grid>

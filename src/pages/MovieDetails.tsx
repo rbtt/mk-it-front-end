@@ -5,21 +5,14 @@ import SearchItem from '../components/SearchItem'
 import Review from '../components/Review'
 import { SearchResults } from '../store/actions'
 import noImage from '../assets/noImage'
+import { apiUrl } from '../env'
 
 const MovieDetails = () => {
   const { title } = useParams()
 
   const [isLoading, setIsLoading] = useState(false)
-  const [data, setData] = useState<SearchResults>({
-    genres: [],
-    id: 0,
-    imageUri: '',
-    length: 0,
-    summary: '',
-    title: '',
-    url: '',
-    year: 0,
-  })
+  const [data, setData] = useState<SearchResults | null>(null)
+  const [review, setReview] = useState<{ rating: number; notes: string } | null>(null)
 
   useEffect(() => {
     ;(async function () {
@@ -27,7 +20,7 @@ const MovieDetails = () => {
       const response = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${title}`)
       const resData = await response.json()
       setData({
-        genres: resData.genres,
+        genres: (resData.genres && resData.genres) || [],
         id: resData.id,
         imageUri: (resData.image && resData.image.medium) || noImage,
         length: resData.runtime,
@@ -39,6 +32,32 @@ const MovieDetails = () => {
         url: resData.officialSite || `https://google.com/search?q=${resData.name}`,
         year: new Date(resData.premiered).getFullYear(),
       })
+
+      // console.log(JSON.stringify({ id: resData.id }))
+
+      const ratingResp = await fetch(`${apiUrl}/ratings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: resData.id }),
+      })
+      const notesResp = await fetch(`${apiUrl}/notes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: resData.id }),
+      })
+
+      if (ratingResp.ok && notesResp.ok) {
+        const { rating } = await ratingResp.json()
+        const { notes } = await notesResp.json()
+        setReview({ notes, rating })
+      } else {
+        setReview({ rating: 0, notes: '' })
+      }
+
       setIsLoading(false)
     })()
   }, [title])
@@ -68,17 +87,26 @@ const MovieDetails = () => {
       }}
       maxWidth='lg'
     >
-      <SearchItem
-        navigateToDetails={false}
-        title={data.title}
-        image={data.imageUri}
-        description={data.summary}
-        genres={data.genres}
-        length={data.length}
-        url={data.url}
-        year={data.year}
-      />
-      <Review />
+      {data && (
+        <SearchItem
+          navigateToDetails={false}
+          id={data.id}
+          title={data.title}
+          image={data.imageUri}
+          description={data.summary}
+          genres={data.genres}
+          length={data.length}
+          url={data.url}
+          year={data.year}
+        />
+      )}
+      {review && data && (
+        <Review
+          movieId={data.id}
+          initialRating={review.rating}
+          initialNotes={review.notes}
+        />
+      )}
     </Container>
   )
 }

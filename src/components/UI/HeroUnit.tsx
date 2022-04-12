@@ -6,9 +6,8 @@ export default function HeroUnit() {
     <>
       <Box
         sx={{
-          p: 7,
+          p: 6,
           backgroundImage:
-            // "url('https://images.unsplash.com/photo-1583719444869-7e9c79d697e2?ar=4:1&fit=crop')",
             "url('https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ar=3:1&fit=crop')",
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',

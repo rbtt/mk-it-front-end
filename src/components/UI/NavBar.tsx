@@ -4,11 +4,12 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import InputBase from '@mui/material/InputBase'
 import SearchIcon from '@mui/icons-material/Search'
-import { Button, Box } from '@mui/material'
+import { Button, Box, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { searchMovie, clearSearchResults } from '../../store/actions'
+import { Home } from '@mui/icons-material'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -65,6 +66,7 @@ export default function SearchAppBar() {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
+            paddingX: 1,
           }}
         >
           <Typography
@@ -87,41 +89,52 @@ export default function SearchAppBar() {
           >
             My Movies Collection
           </Typography>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              width: { xs: '100%', sm: 'inherit' },
+          <IconButton
+            onClick={() => navigate('/')}
+            sx={{ display: { xs: 'flex', sm: 'none' } }}
+          >
+            <Home sx={{ fontSize: 33 }} />
+          </IconButton>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault()
+              await dispatch(clearSearchResults())
+              dispatch(searchMovie(value))
+              value.length === 0
+                ? navigate('/search')
+                : navigate(`/search?title=${encodeURI(value)}`)
+              setValue('')
             }}
           >
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon fillOpacity={0.5} />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder='Search…'
-                inputProps={{ 'aria-label': 'search' }}
-                spellCheck='false'
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
-            </Search>
-            <Button
-              sx={{ marginLeft: 1 }}
-              variant='outlined'
-              color='secondary'
-              onClick={async () => {
-                await dispatch(clearSearchResults())
-                dispatch(searchMovie(value))
-                value.length === 0
-                  ? navigate('/search')
-                  : navigate(`/search?title=${encodeURI(value)}`)
-                setValue('')
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: { xs: '100%', sm: 'inherit' },
               }}
             >
-              Search
-            </Button>
-          </Box>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon fillOpacity={0.5} />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder='Search…'
+                  inputProps={{ 'aria-label': 'search' }}
+                  spellCheck='false'
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              </Search>
+              <Button
+                sx={{ marginLeft: 1 }}
+                variant='outlined'
+                color='secondary'
+                type='submit'
+              >
+                Search
+              </Button>
+            </Box>
+          </form>
         </Toolbar>
       </AppBar>
     </Box>

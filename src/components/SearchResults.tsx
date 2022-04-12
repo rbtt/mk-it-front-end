@@ -1,5 +1,4 @@
 import { Container, Grid } from '@mui/material'
-import { useDispatch } from 'react-redux'
 import { useSelector } from '../store/useSelector'
 import SearchItem from './SearchItem'
 
@@ -20,6 +19,7 @@ const SearchResults = () => {
         {results.map((item) => (
           <SearchItem
             navigateToDetails
+            id={item.id}
             key={item.id}
             title={item.title}
             image={item.imageUri}
